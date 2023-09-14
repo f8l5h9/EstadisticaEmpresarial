@@ -1,0 +1,513 @@
+---
+title: "<strong>Estadística Empresarial I</strong> <br> <br> Tema 7: Regresión Lineal"
+author:
+- <strong>Fernando A. López</strong> <br> Catedrático de Universidad <br> Facultad de CC de la Empresa <br> Universidad Politécnica de Cartagena <br> <br> <br>
+date: "`r Sys.Date()` <br>"
+output:
+  bookdown::html_document2:
+    number_sections: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: yes
+      smooth_scroll: no
+    toc_title: Article Outline
+    self_contained: true
+
+# output: 
+#   rmarkdown::html_vignette:
+#     number_sections: TRUE
+
+linkcolor: red
+link-citations: yes
+# bibliography: ["bibliospq.bib"]
+vignette: |
+  %\VignetteIndexEntry{spsur user guide}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown} 
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-size: 14pt;
+  text-align: justify
+}
+h1.title {
+  color: DarkRed;
+}
+h1 { /* Header 1 */
+  color: DarkBlue;
+}
+h2 { /* Header 2 */
+  color: DarkBlue;
+}
+h3 { /* Header 3 */
+  color: DarkBlue;
+}
+</style>
+```
+
+```{r include=FALSE}
+knitr::opts_chunk$set(fig.path = 'figurasR/',
+                      echo = FALSE, warning = FALSE, message = FALSE,
+                      fig.pos="H",fig.align="center",out.width="95%",
+                      cache=FALSE)
+
+```
+
+# Introducción
+
+La regresión lineal simple es una herramienta fundamental en estadística descriptiva que se utiliza para _comprender_ y _modelar_ la relación entre dos variables: una variable independiente ($X$) y una variable dependiente ($Y$). Se basa en la idea de que existe una relación lineal entre estas variables, lo que significa que se puede expresar como una línea recta en un gráfico. La regresión lineal simple se utiliza para predecir o explicar el valor de la variable dependiente en función de la variable independiente, lo que permite hacer inferencias y tomar decisiones informadas en una amplia variedad de campos, desde la economía hasta la ciencia
+
+> **_La regresión lineal permite modelizar y cuantificar la relación entre dos variables, ayudando a su comprensión, desarrollando un algoritmo de predicción_**
+
+La regresión lineal es de vital importancia en estadística descriptiva por varias razones fundamentales:
+
+- **Modelar Relaciones:** Permite modelar y entender las relaciones entre variables, especialmente la relación entre una variable independiente y una variable dependiente. Esto es crucial para comprender cómo una variable afecta o se relaciona con otra.
+
+- **Predicción:** La regresión lineal se utiliza para hacer predicciones basadas en datos históricos o conocidos. Esto es útil en una variedad de campos, desde finanzas (predicción de precios de acciones) hasta la ciencia (predicción de tendencias climáticas).
+
+- **Causalidad:** Ayuda a explorar y establecer relaciones de causalidad entre variables. Si una variable independiente tiene un efecto significativo sobre la variable dependiente, puede indicar una relación causal.
+
+- **Toma de Decisiones:** Proporciona una base sólida para tomar decisiones informadas. Al comprender las relaciones entre variables, las organizaciones pueden tomar decisiones estratégicas más efectivas.
+
+- **Visualización:** La regresión lineal se puede representar visualmente en un gráfico de dispersión, lo que facilita la comunicación de resultados y tendencias a un público no técnico.
+
+Son muchos los fenómenos económicos susceptibles de ser modelizados, esto es, con posibilidad de formular leyes que expliquen su comportamiento: Por ejemplo, las ventas de un determinado item pueden depender, en un momento determinado, del precio o bien, el consumo estará en función de la renta, la producción de una empresa en función de la cantidad de mano de obra, etc. Bajo esta suposición de dependencia funciona estaremos interesados en estimar la relación que existe en términos matemáticos y construir una ecuación que asocie las variables que estemos estudiando.
+
+## En la empresa
+
+La regresión lineal tiene una gran relevancia en el ámbito empresarial debido a su capacidad para modelar y entender las relaciones entre variables. Esta técnica estadística es un herramienta útil en la toma de decisiones empresariales y en la optimización de procesos. 
+
+Algunas de las formas en que la regresión lineal es relevante en el entorno empresarial:
+
+- **Predicción de Ventas:** Las empresas pueden utilizar modelos de regresión lineal para predecir las ventas futuras en función de variables como el tiempo, el precio, la publicidad y otros factores, lo que les permite planificar sus operaciones y recursos de manera más efectiva.
+
+- **Optimización de Precios:** Las estrategias de fijación de precios pueden beneficiarse de la regresión lineal al analizar cómo los precios afectan la demanda y las ventas, ayudando a encontrar el equilibrio adecuado entre maximizar los ingresos y mantener la competitividad.
+
+- **Gestión de Inventarios:** La regresión lineal puede ayudar a determinar la cantidad óptima de inventario a mantener en stock, minimizando los costos de almacenamiento y agotamiento de existencias.
+
+- **Evaluación de Publicidad:** Las empresas pueden evaluar la eficacia de sus campañas de marketing y publicidad mediante modelos de regresión que relacionan el gasto publicitario con el aumento de las ventas o el reconocimiento de la marca.
+
+- **Control de Calidad:** En la producción, la regresión lineal se utiliza para identificar variables que afectan la calidad del producto y mejorar los procesos de fabricación.
+
+- **Optimización de Cadenas de Suministro:** La regresión lineal se aplica para mejorar la eficiencia de la cadena de suministro al evaluar cómo factores como la distancia, el tiempo y la demanda afectan los tiempos de entrega y los costos de transporte.
+
+- **Análisis de Costos:** Las empresas pueden utilizar la regresión lineal para comprender cómo los costos variables y fijos se relacionan con la producción y los volúmenes de ventas, lo que facilita la planificación financiera y el control de costos.
+
+- **Segmentación de Clientes:** En marketing, la regresión lineal puede ayudar a segmentar a los clientes en grupos basados en su comportamiento de compra, lo que permite una personalización más efectiva de las estrategias de marketing.
+
+La regresión lineal es una herramienta versátil y poderosa en el ámbito empresarial que ayuda a las organizaciones a tomar decisiones fundamentadas, optimizar operaciones y mejorar su competitividad en un entorno empresarial cada vez más complejo.
+
+Centraremos el desarrollo de los siguientes temas en responder a dos preguntas que deben surgir cuando nos planteemos una situación de este tipo. En primer lugar debemos de estudiar la forma que debe tener la relación matemática entre las variables, esto es, si se trata de una relación lineal, exponencial, potencial, parabólica, etc. y en segundo lugar debemos plantearnos la fuerza con que se dá esta relación intentando medir el grado de representatividad del modelo que planteamos.
+
+Es importante señalar que la aplicación de estas técnicas de regresión requieren un análisis teórico previo que relacione las variables objeto de estudio dando así consistencia al análisis estadístico. De lo contrario podemos llegar a conclusiones completamente absurdas. 
+
+## Tipos de dependencia estadística
+
+Antes de continuar sería interesante diferenciar entre tres tipos de dependencia estadística que puede ayudarnos a la realización de este análisis teórico previo. La relación de dependencia entre dos variables puede obedecer a tres motivos diferentes:
+
+a) **Al azar:** Es posible que debido a la información disponible de dos variables (los datos) pueda plantearse una relación absurda entre dos variables, así por ejemplo, es posible que debido a la coincidencia o al azar dos variables como el consumo de gasolina de mi coche y las exportaciones de trigo en la Unión Soviética aparezcan como dependientes, esto no es más que una pura coincidencia y su relación no tiene ninguna base teórica.
+
+b) **Una tercera variable influye sobre las dos variables consideradas:** Cuando dos variables se ponen en dependencia se supone que una de ellas explicará el comportamiento de la otra, pero es posible encontrar situaciones en las que esta hipótesis sea falsa ya que exista una tercera variable fuera de nuestras consideraciones que actue como "motor" de esa relación. Asi por ejemplo, si estudiamos la relación entre las variables Consumo y Ahorro ambas van a aparecer como dependientes pero ningina explica la otra, sino que es la variable Renta la que genera esta relación.
+
+c) **Una variable influye en la otra:** Por ejemplo el gasto en carne de una familia viene determinado por el número de miembros de ésta.
+
+Esbozando con más precisión las líneas de desarrollo de este bloque de temas destinados al estudio de la Regresión diremos que en un primer tema nos preocuparemos del caso más simple, la regresión lineal, estudiando tanto el método de los mínimos cuadrados como el coeficiente de correlación lineal. En un segundo tema extenderemos estos dos conceptos a diversas relaciones funcionales, presentando también técnicas alternativas al método de los mínimos cuadrados. Por último plantearemos en otro tema la regresión lineal múltiple como el caso en el cual una varaible depende de las fluctuaciones de una conjunto de factores.
+
+# El método de los mínimos cuadrádos
+
+Para introducirnos en el análisis de la regresión nos plantearemos el siguiente ejemplo :
+
+Supongamos que un fabricante de electrodomésticos dispone de un conjunto de observaciones de precios que ha ido fijando y cantidades de producto que ha vendido a estos precios.
+
+Si llamamos Y a las cantidades y X a los precios las observaciones han sido las siguientes:
+
+<center>
+| $y_i$    | $x_i$ | 
+|:----:|:----:|
+|200   |100 | 
+|180   |110  | 
+|175   |120   |
+|170  | 130   |
+|168 |  140   |
+|165|   150|
+</center>
+
+El primer problema que debemos intentar solucionar es establecer el tipo de posible relación funcional entre las variables, para ello siempre procederemos realizando un gráfico llamado **nube de puntos**. Este gráfico se construye dibujando en un eje coordenados los puntos correspondientes a las distintas observaciones. La así llamada nube de puntos resultantes nos indicará el tipo de relación funcional entre las variables.
+
+<center>
+![Nube de puntos](/Users/fernandoair/Dropbox/EstadisticaEmpresarial/figurasR/regresion_0.png){width=400px height=330px}
+</center>
+
+En el caso de nuestro ejemplo la nube de puntos resultantes bien podría ser resumida o sustituida mediante una recta.
+
+```{r, echo=FALSE,warning=FALSE}
+library(ggplot2)
+df <- data.frame(Y=c(200,180,175,170,168,166),X=c(100,110,120,130,140,150))
+ggplot(df, aes(X, Y, color = "blue")) +
+  geom_point(size=3) + 
+  geom_smooth(method = "lm", se = FALSE, color = "blue") + 
+  labs(title = "Nube de puntos con Línea de Ajuste",
+       x = "Variable Independiente",
+       y = "Variable Dependiente") +
+  theme_bw() +
+  theme(legend.position='none') 
+
+```
+En esta situación nuestro siguiente objetivo será determinar entre todas las posibles rectas la que "mejor" sintetice la nube de puntos. Ahora bien, ¿qué entenderemos como la "mejor" función? A esta cuestión nos responde el método de los mínimos cuadrados, según el cual la mejor recta será aquella para la que se hagan mínimas la suma de las distancias entre cada observación y el punto de la recta más próximo en dirección vertical.
+
+<center>
+![Mínimos Cuadrados Ordinarios](/Users/fernandoair/Dropbox/EstadisticaEmpresarial/figurasR/regresion_1.png){width=600px height=300px}
+</center>
+
+El MCO puede formalizarse como sigue. Supondremos que la recta genérica $Y = a + b X$ es la relación lineal que liga nuestras variables y tratemos de encontrar los valores "a" y "b" que hacen mínima la suma de estas distancias. Recordemos que hemos llamado $(x_i,y_i)$ al conjunto de nuestras observaciones y sea 
+
+$$
+y_i^* = a + b x_i
+$$
+al que llamaremos valor ajustado.
+
+> **$y_i^*$ es el valor ajustado; $y_i$ es el valor observado**
+
+La diferencia entre valor observado y ajustado son los errores del modelo:
+$$
+e_i^2 = ( y_i - y_i^*)^2
+$$
+El MCO identifica los parámetros a y b de la recta minimizando la suma de residuos al cuadrado:
+
+$$
+\min \sum_{i=1}^n{e_i^2} = \min \sum_{i=1}^n{(y_i-y_i^*)^2}
+$$
+atendiendo al hecho de que  $y^* = a + b x_i$  podemos escribir:
+
+$$
+\min_{a,b} f(a,b) = \min \sum_{i=1}^n{(y_i-a-bx_i)^2}
+$$
+La minimización de esta expresión se efectúa mediante la igualación a cero de sus derivadas parciales con respecto a "a" y a "b", puesto que estos son los parámetros desconocidos de la recta. Así podemos escribir:
+
+$$
+{\partial f \over \partial a}= -2 \sum_{i=1}^n(y_i-a-bx_i)=0 \\
+{\partial f \over \partial b}= -2 \sum_{i=1}^n(y_i-a-bx_i)x_i=0
+$$
+
+queda por tanto un sistema de dos ecuaciones con dos incógnitas cuya solución dará los valores de "a" y "b" que minimizan la suma de los residuos al cuadrado.
+
+Este sistema de ecuaciones recibe el nombre de **Sistema de Ecuaciones Normales (SEN)**.
+
+Es posible obtener una expresión cerrada para los parámetros de al recta resolviendo analíticamente el SEN:
+
+Dividiendo por N ambas ecuaciones se obtiene el siguiente sistema:
+
+$$
+\bar y = a + b \bar x \\
+a_{11} = a \bar x + b a_2^x
+$$
+
+despejando "a" de la primera ecuación:  $a = \bar y - b \bar x$  y sustituyendo en la segunda
+
+$$
+a_{11} = (\bar y - b \bar x ) x + b a_2^x = \bar y x - b \bar x \bar x + b a_2^x = \\
+    = \bar y \bar x + b ( a^2_x - x  ) = \bar  y \bar x + b s_x^2 
+$$
+despejando "b" tenemos
+
+$$
+b = {s_{xy} \over s_x^2 } \\
+a = \bar y - b \bar x
+$$
+
+## Propiedades de la recta de regresión
+
+A partir del razonamiento realizado en el epígrafe anterior pueden deducirse las siguientes propiedades:
+
+**Propiedad 1:** La suma de los residuos es cero, esto es:
+$$
+\sum_{i=1}^n e_i = 0
+$$
+_Demostración:_ En clase
+
+Expresado en otras palabras podríamos que mediante este método de los mínimos cuadrados el tamaño global de los errores por defecto es igual al de los errores por exceso.
+
+**Propiedad 2:** Las dos rectas de regresión 
+$$
+ Y = a + b X \\
+ X = c + d Y
+$$
+se cortan en el punto $(\bar  x , \bar y )$ que es precisamente el centro de gravedad de la nube de puntos.
+
+_Demostración:_ En clase
+
+**Propiedad 3:** En el caso de que la dependencia lineal sea de tipo exacto o funcional, las dos rectas de regresión se confunden en una sola y ambas son recíprocas, esto es $b = {1 \over a}$
+
+_Demostración:_ Sin demostración.
+
+**Propiedad :4** Las variables estadísticas $Y^*$ y $e$ son incorreladas. Es decir, $s_{ey^*} = 0$
+
+_Demostración:_ 
+$$
+\sum_{i=1}^ne_iy_i^* = \sum_{i=1}^ne_i(a+bx_i) =a\sum_{i=1}^ne_i - b\sum_{i=1}^ne_ix_i = 0
+$$
+
+
+## Interpretación del modelo lineal
+
+¿Cómo interpretar los parámetros a y b del modelo ajustado $Y?a+b>X$?
+
+> **_El párámtro "a" indica el valor predicho para Y el caso de x=0. Puede no tener sentido si x=0 está alejado de la $\bar x$_**
+
+> **_El parámetro "b" indica el incremento medio de Y cuando X se incrementa en una unidad_**
+
+Por ejemplo, si tenemos un modelo $Y=1000 + 30X$ que explica el salario (Y en €) en función de las horas extras trabajadas (X), el parámetro a=1000 sería el salario si no se trabajase ninguna hora extra (x=0). El modelo indica que hay un incremento **medio** de 30€ por cada hora extra adicional que se trabaje.
+
+## Salarios medios
+
+La [Encuesta de Inserción Laboral de Titulados Universitarios 2019](https://www.ine.es/dynt3/inebase/index.htm?padre=6941&capsel=6941)  del INE ofrece información desglosada por género sobre las bases de cotización a la Seguridad Social de los graduados universitarios en función del ámbito de estudio a los 1, 2, 3 y 4 años de egresar. La desagregación por sexo muestra que los salarios de las mujeres son en la mayoría de los casos inferiores a los de los hombres. Hay grandes diferencias en bases de cotización dependiendo del ámbito de estudio.
+
+```{=html}
+<iframe title="Base cotización de los  graduados. A los 4 años de egresar" aria-label="Diagrama de dispersión" id="datawrapper-chart-MQ9X9" src="https://datawrapper.dwcdn.net/MQ9X9/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="400" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
+</script>
+```
+
+Un modelo de regresión lineal puede explicar la relación entre el salario al año y a los 4 años de egresar. La variables sería:
+
+$$
+Y =  \ Salario  \ final = Base \ de  \ cotización \  a \  los \  4 \  años \ de  \ egresar\\
+X =  \ Salario  \ inicial = Base \ de  \ cotización \  al \  año  \ de  \ egresar \\
+Y = a + bX
+$$
+
+```{r, echo=FALSE, fig.width = 6, fig.height = 6}
+library(plotly)
+library(ggplot2)
+library(gapminder)
+library(MASS)
+library(readxl)
+datos <- read_excel("/Users/fernandoair/Dropbox/EstadisticaEmpresarial/Datos/Datos para R Base_cotizacion_Sexo_Ambito_Grado_Total_2.xlsx")
+datos$Ambos <- as.factor(datos$Ambos)
+p <- ggplot(datos, aes(Año1, Año4, color = Titulación)) +
+  geom_point(aes( frame = Ambos)) + 
+  geom_smooth(method = "lm", se = FALSE, color = "blue",aes(frame = Ambos)) + 
+  labs(x = "Salario inicial",
+       y = "Salario final") +
+  xlim(c(15000,30000))+
+  ylim(c(20000,40000))+
+  coord_fixed(ratio = .8) +
+    theme_bw() +
+  theme(legend.position='none') 
+fig <- ggplotly(p)
+fig <- fig %>% 
+  animation_opts(
+    1000, easing = "elastic", redraw = FALSE)
+fig
+```
+
+```{r,echo=FALSE}
+summary(lm(Año4 ~ Año1, data = datos,subset=Ambos=="H"))
+summary(lm(Año4 ~ Año1, data = datos,subset=Ambos=="M"))
+```
+
+# La calidad del modelo
+
+Con lo desarrollado hasta ahora hemos determinado la "mejor" de las rectas que determina una relación lineal entre dos variables estadísticas. Ahora bien, el hecho de que sea la "mejor" recta no significa que esta sea una "buena" recta, ya que es posible que bien exista otra función matemática que mejor modele la relación entre las variables o bien que a pesar de encontrar una relación lineal, los errores que se están cometiendo al realizar esta suposición sean demasiado grandes como para tenerla en consideración.
+
+Dicho esto, deberíamos intentar encontra un coeficiente que nos indique el grado de bondad o de representatividad de la relación lineal, de tal forma que gracias a él podamos estar seguros de si esta relación es o no aceptable. Este punto es semejante a lo que ya advertíamos sobre la media aritmética cuando mediamos su grado de representatividad mediante la desviación típica. 
+
+Así, el objeto de la regresión es ajustar una línea, recta o curva, a una nube de puntos, mientras que el objeto de la correlación  es determinar hasta qué punto es bueno dicho ajuste.
+
+Debemos por otra parte advertir que los coeficientes que obtengamos darán información sobre el grado de representatividad de un modelo dado, y no sobre el grado de dependencia entre las variables (de lo que se ocupa la correlación).
+
+## La varianza residual
+
+La forma a priori más lógica de medir la calidad de un determinado ajuste sería la de cuantificar las desviaciones que hemos cometido al sustituir la función por la nube de puntos. 
+
+Recordemos que el método de los mínimos cuadrados se basaba en encontrar aquellos parámetros que hacían mínima una determinada expresión. Sería pues una medida de la calidad del ajuste el valor que alcanza este mínimo. Así pues siguiendo nuestro desarrollo deberíamos calcular el valor de 
+
+$$
+\sum_{i=1}^n e_i^2
+$$
+o equivalentemente el de:
+$$
+{1 \over N}\sum_{i=1}^n e_i^2
+$$
+A este término se le conoce con el nombre de varianza residual ya que coincide con el valor de la varianza de la variable estadística $e_i$ (recordar la propiedad 1 en la que se probaba que el error medio es cero) y a partir de ahora nombraremos por $s_e^2$ .
+
+Si desarrollamos este término para el caso de un ajuste lineal tendremos que:
+
+$$
+s_e^2= {1 \over N}\sum_{i=1}^ne_i^2 = {1 \over N}\sum_{i=1}^ne_i(y_i-y_i^*) = {1 \over N}\sum_{i=1}^ne_iy_i - {1 \over N}\sum_{i=1}^ne_iy_i^* = \\
+= {1 \over N}\sum_{i=1}^n(y_i-a-bx_i)y_i = {1 \over N}\sum_{i=1}^ny_i^2 -a{1 \over N}\sum_{i=1}^nx_i - b{1 \over N}\sum_{i=1}^nx_iy_i = \\
+=a_2^y-a \bar x -b a_{11}
+$$
+expresión que es más cómoda de aplicación que las anteriores ya que dos de los tres sumatorios que figuran en ella ya han sido calculados para la determinación de los parámetros "a" y "b".
+
+La varianza residual mide la dispersión existente entre las ordenadas de los valores observados ($y_i$) y los valores ajustados ($y_i^*$), de tal forma que si esta varianza es muy grande, la representatividad de la recta de regresión será peque¤a y si, por el contrario, $s_e^2$ es pequeña la representatividad o bondad del ajuste será grande. En el caso particular que $s_e^2=0$ encontraremos una dependencia perfecta entre las variables estudiadas, ya que en tal caso la recta pasaría por todos los puntos.
+
+## Relación entre las varianzas $s_y^2$; $s_{y*}^2$; $s_e^2$
+
+Atendiendo a la relación que existe entre las variables:
+
+$$
+Y = Y^* + E
+$$
+podemos estudiar la relación que existe entre sus varianzas. En primer lugar es rápido comprobar que la media de los valores ajustados coincide con la media de los valores observados ($\bar y = \bar {y^*}$) ya que la variable E tiene media cero (propiedad 1). En función de este resultado
+
+$$
+s_y^2={1 \over N}\sum_{i=1}^ny_i^2 - \bar y^2 = {1 \over N}\sum_{i=1}^n(y_i^*+e_i)^2 - \bar y^2 = \\
+= {1 \over N}\sum_{i=1}^n(y_i^{*2} + e_i^2 +2y_i^*e_i) - \bar y^2 = {1 \over N}\sum_{i=1}^ny_i^{*2} + {1 \over N}\sum_{i=1}^ne_i^2 + 2{1 \over N} \sum_{i=1}^ny_i^*e_i - \bar y^{*2} = \\
+=s_{y*}^2 + s_e^2 
+$$
+
+
+Esta igualdad entre las varianzas:
+$$
+s_y^2=s_{y^*}^2+s_e^2
+$$
+indica que la variación de la variable dependiente ($s_y^2$) viene explicada en parte por la variación de la variable ajustada ($s_{y^*}^2$), quedando sin explicar la variación medida por $s_e^2$.
+
+## El coeficiente de determinación $R^2$
+
+Según la relación entre las varianzas es posible obtener una medida de la proporción de varianza de la variable $Y$ que está recogida por la variable $Y^*$. Esto es, podemos establecer el cociente entre  $s_y2$ y  $s_{y^*}^2$ obteniendo así el llamado **Coeficiente de Determinación**, que simbolizaremos como es costumbre por $R^2$.
+
+$$
+R^2= {s_{y^*}^2 \over s_y^2}
+$$
+
+expresión que teniendo en cuenta el apartado anterior podemos escribir como:
+
+$$
+R^2= {s_{y^*}^2 \over s_y^2}={s_{y}^2-s_e^2 \over s_y^2}=1-{s_e^2 \over s_y^2}
+$$
+
+
+Estudiemos ahora el campo de variación de este coeficiente y el significado de los posibles valores que alcanza.
+
+Como $s_y^2=s_{y^*}^2+s_e^2$ el máximo valor que puede alcanzar $R^2$ es 1 y el mínimo 0. Así,
+
+$$
+0 \leq R^2 \leq 1
+$$
+y por tanto 
+$$
+-1 \leq R \leq 1
+$$
+
+- Si $R^2 = 1$ tendremos que  $s_e^2 = 0$  y por tanto $s_y^2 = s_{y^*}^2$  de tal forma que todos los valores teóricos coinciden con los ajustados con lo cual todos los puntos de la nube están en la función y, por tanto, la dependencia es funcional. Diremos en este caso que existe correlación perfecta.
+
+- Si $R^2 = 0$ tendremos que $s_y^2 = s_e^2$ y por tanto $s_{y^*}^2$ = 0 no consiguiéndose ninguna explicación de la variable $Y$ relacionándola con la $X$, y por tanto no está asociadas. La correlación es nula.
+
+- Para $0 < R^2 < 1$, siendo más intensa esta relación cuanto más próximo se encuentre este coeficiente a 1.
+
+Para concluir diremos que como regla general podemos aceptar la relación entre las variables cuando $∣R∣ > 0,75$
+
+## El coeficiente de correlación lineal $r$
+
+Se define este coeficiente de aplicación tan sólo en el caso del ajuste lineal, mediante la expresión 
+$$
+r_{xy} = {s_{xy} \over s_xs_y}
+$$
+
+este coeficiente de correlación lineal al cuadrado ($r^2$) coincide en el caso de ajuste lineal con el coeficiente de determinación ($R^2$).
+
+**Propiedad 1:** El coeficiente de determinación coincide con el coeficiente de correlación lineal al cuadrado.
+
+$$
+r^2=R^2
+$$
+_Demostración:_ Sin demostración
+
+**Propiedad 2:** El propucto de las pendientes de las rectas de regresión de 'Y sobre X' y de 'X sobre Y' coincide con el cuadrado del coeficiente de correlación lineal al cuadrado 
+
+_Demostración:_
+
+Haciendo uso por otra parte de la expresión del coeficiente b que expresa la dependencia de la variable Y con respecto a X y del coeficiente b'que expresa la dependencia de la variable X con respecto a Y tendremos que:
+
+$$
+b={s_{xy} \over s_x^2} \\
+b'={s_{xy} \over s_y^2} 
+$$
+y de aquí que:
+$$
+r^2=b \cdot b'
+$$
+lo que permite dar una nueva definición del coeficiente de correlación lineal como media geométrica de los coeficientes de regresión b y b'
+
+$$
+r = \pm \sqrt{b \cdot b'}
+$$
+
+
+> **_Si $r = -1$ tendremos que $s_e^2 = 0$  y por tanto $s_y^2 = s_{y^*}^2$  obteniendo también en este caso una dependencia funcional, pero aquí las variables fluctúan en sentidos opuestos. Se dice que existe correlación perfecta negativa, indicando así que la recta de regresión tiene pendiente negativa_**
+
+ > **_Para $-1 < R < 0$ la correlación será negativa, siendo más intensa cuanto más próximo este a -1_**
+
+
+## Ejemplo coeficiente correlación
+
+```{r, echo=FALSE}
+# Generar datos con una distribución normal multivariante
+datos <- matrix(0,ncol=3,nrow = 1)
+for (i in 1:21){
+  j=(i-11)
+  set.seed(123)  # Establecer una semilla para la reproducibilidad
+  n <- 50  # Tamaño de la muestra
+  mean_vector <- c(0, 0)  # Vector de medias
+  cov_matrix <- matrix(c(1, j/10, j/10, 1), nrow = 2)  # Matriz de covarianza
+  datos0 <- cbind(mvrnorm(n, mean_vector, cov_matrix),rep(j/10,20))
+  datos <- rbind(datos,datos0)
+}
+df <- as.data.frame(datos)
+df <- df[-1,]
+names(df) <- c("X","Y","r")
+df$X <- round(df$X,2)
+df$Y <- round(df$Y,2)
+p <- ggplot(df, aes(X, Y, color = "blue")) +
+  geom_point(aes( frame = r)) + 
+  geom_smooth(method = "lm", se = FALSE, color = "blue",aes(frame = r)) + 
+  labs(title = "Gráfico de Dispersión con Línea de Ajuste",
+       x = "Variable Independiente",
+       y = "Variable Dependiente") +
+  theme_bw() +
+  theme(legend.position='none') 
+fig <- ggplotly(p)
+fig <- fig %>%
+  animation_slider(
+    currentvalue = list(prefix = "Coef corr= ", font = list(color="red")))
+fig <- fig %>% 
+  animation_opts(
+    1000, easing = "elastic", redraw = FALSE)
+fig
+
+```
+
+## Valización cruzada
+
+La validación cruzada es una medida de la calidad de un modelo de regresión lineal simple (o cualquier otro modelo) en estadística descriptiva que se utiliza para evaluar la capacidad del modelo para generalizar a datos no vistos. Es una técnica fundamental para estimar el rendimiento del modelo y detectar posibles problemas como el sobreajuste.
+
+En el contexto de un modelo de regresión lineal simple, la validación cruzada implica dividir el conjunto de datos en varios subconjuntos (folds), generalmente en un conjunto de entrenamiento y uno de prueba, y evaluar el modelo en cada fold. A continuación, se describe cómo se utiliza la validación cruzada como medida de calidad:
+
+1. **División de Datos**: Los datos se dividen en varios subconjuntos. Uno de los métodos más comunes es la validación cruzada k-fold, donde los datos se dividen en k subconjuntos (folds) aproximadamente del mismo tamaño. Por ejemplo, si se utiliza k = 5, los datos se dividen en cinco folds.
+
+2. **Entrenamiento y Prueba**: Se ajusta el modelo de regresión lineal simple en el conjunto de entrenamiento, utilizando k-1 folds, y se evalúa en el conjunto de prueba, que es el fold restante. Este proceso se repite k veces, de modo que cada fold se utiliza una vez como conjunto de prueba, y k-1 veces como conjunto de entrenamiento.
+
+3. **Métricas de Evaluación**: En cada iteración, se calculan métricas de evaluación del modelo en el conjunto de prueba, como el Error Cuadrático Medio (ECM), el Coeficiente de Determinación ($R^2$), el Error Absoluto Medio (EAM), entre otros.
+
+4. **Promedio de Métricas**: Las métricas de evaluación se promedian sobre las k iteraciones para obtener una medida global del rendimiento del modelo. Esto proporciona una estimación más robusta de la calidad del modelo, ya que se basa en múltiples conjuntos de prueba.
+
+La ventaja de utilizar la validación cruzada es que proporciona una medida más confiable de la calidad del modelo en comparación con una sola división de datos en entrenamiento y prueba. Además, ayuda a identificar problemas de sobreajuste o subajuste, ya que evalúa el modelo en diferentes conjuntos de datos de prueba.
+
+> **_La validación cruzada es una medida importante de la calidad de un modelo de regresión lineal simple en estadística descriptiva, ya que evalúa su capacidad de generalización y proporciona una estimación más precisa de su rendimiento_**
+
+# La predicción
+
+El objeto último de la regresión es la predicción o pronostico sobre el comportamiento de una variable para un valor determinado de la otra. Con el desarrollo que hemos presentado en este tema esta predicción no se queda más que en una mera interpolación y son necesarias técnicas estadísticas más avanzadas para poder realizar una verdadera predicción.
+
+Al hacer predicciones a partir de un modelo estimado conviene hacer las siguietes observaciones:
+
+a) La fiabilidad de los valores predichos para la variable endógena será tanto mayor cuanto mejor sea el ajuste, es decir, cuanto mayor sea el valor de $r^2$, en el supuesto de que exista claro está una relación causal entre las variables.
+
+b) La fiabilidad de los valores pronosticados decrece a medida que nos alejamos de $\bar x$ el valor de la variable exógena en que se basa la predicción. Cuando hacemos predicciones para valores muy alejados del centro de gravedad de la distribución corremos el riesgo de que no sea válido el modelo utilizado.
