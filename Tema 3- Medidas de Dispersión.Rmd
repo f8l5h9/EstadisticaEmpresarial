@@ -1,0 +1,353 @@
+---
+title: "<strong>Estadística Empresarial I</strong> <br> <br> Tema 3: Medidas de Dispersión"
+author:
+- <strong>Fernando A. López</strong> <br> Catedrático de Universidad <br> Facultad de CC de la Empresa <br> Universidad Politécnica de Cartagena <br> <br> <br>
+date: "`r Sys.Date()` <br>"
+output:
+  bookdown::html_document2:
+    number_sections: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: yes
+      smooth_scroll: no
+    toc_title: Article Outline
+    self_contained: true
+
+# output: 
+#   rmarkdown::html_vignette:
+#     number_sections: TRUE
+
+linkcolor: red
+link-citations: yes
+# bibliography: ["bibliospq.bib"]
+vignette: |
+  %\VignetteIndexEntry{spsur user guide}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown} 
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-size: 14pt;
+  text-align: justify
+}
+h1.title {
+  color: DarkRed;
+}
+h1 { /* Header 1 */
+  color: DarkBlue;
+}
+h2 { /* Header 2 */
+  color: DarkBlue;
+}
+h3 { /* Header 3 */
+  color: DarkBlue;
+}
+</style>
+```
+
+```{r include=FALSE}
+knitr::opts_chunk$set(fig.path = 'figurasR/',
+                      echo = FALSE, warning = FALSE, message = FALSE,
+                      fig.pos="H",fig.align="center",out.width="95%",
+                      cache=FALSE)
+
+```
+
+# Introducción
+
+Las medidas de dispersión son indicadores esenciales de la estadística descriptiva y desempeñan un papel fundamental en la interpretación y comprensión de un conjunto de datos.
+
+El objetivo de estos indicadores de dispersión es cuantificar la variabilidad o dispersión de los datos. Mientras que las medidas de tendencia central (como la media o la mediana) proporcionan una idea de la ubicación central de los datos, las medidas de dispersión indican cuán dispersos están esos datos alrededor de la medida central. Esto es crucial para comprender la distribución de los valores en un conjunto de datos.
+
+> **_Las medidas de dispersión indican cuán dispersos están esos datos alrededor de la medida central_**
+
+A continuación, se destacan algunas de las razones clave por las cuales las medidas de dispersión son importantes en la estadística descriptiva:
+
+**Permiten la Comparación:** Las medidas de dispersión permiten comparar la dispersión de diferentes conjuntos de datos. Al comparar las medidas de dispersión, se puede determinar cuál de los conjuntos de datos es más homogéneo o más variable
+
+**Influencia en la Toma de Decisiones:** La comprensión de la dispersión de los datos es esencial para la toma de decisiones. Por ejemplo, en la gestión de riesgos financieros, una mayor dispersión en los rendimientos de una inversión indica un mayor riesgo, lo que puede influir en las decisiones de inversión.
+ 
+**Interpretación de Resultados de Estudios:** Las medidas de dispersión son esenciales para interpretar los resultados. Indican _cuán consistentes o variables son las observaciones_, lo que afecta la confiabilidad de las conclusiones del estudio.
+  
+**Optimización de Procesos:** En la gestión de la calidad y la mejora de procesos, las medidas de dispersión se utilizan para evaluar la variabilidad en la producción o el rendimiento. La reducción de la dispersión puede ser un objetivo clave para mejorar la calidad y la eficiencia.
+
+La medidas de dispersión se clasifican en absolutas y relativas
+
+- **Medidas de Dispersión Absolutas:** Estas medidas cuantifican la dispersión o variabilidad en términos de las unidades de la variable en estudio.
+
+- **Medidas de Dispersión Relativas:** Estas medidas de dispersión expresan la variabilidad en relación con la media de los datos. A menudo se utilizan para comparar la dispersión entre diferentes conjuntos de datos o para evaluar la dispersión en términos porcentuales. 
+
+# Medidas de dispersión absolutas.
+
+Las medidas de tendencia central tienen como objetivo sintetizar en un solo número toda la información que aparecía en una distribución de frecuencias. El problema que se plantea inmediatamente es el de medir el grado de representatividad que tienen las medidas de tendencia central en cada caso.
+
+> **_No siempre la media es un buen resumen de la información. De forma intuitiva, una medida de tendencia central será más representativa en tanto en cuanto los valores de la variable estén más próximos a la medida, mientras que será menos representativa si las observaciones se encuentran muy alejadas de la medida de tendencia central._**
+
+Para resaltar aun más este problema considérese el siguiente ejemplo:
+
+Se está realizando un estudio sobre dos empresas (A y B) cada una de ellas con 100 trabajadores. La distribución de los salarios se realiza de forma distinta en cada una de ellas, según la siguiente tabla:
+
+| Salario (A) | Frecuencia (A) | Salario (B) | Frecuencia (B) |
+|-------------------|-------------|---------------|--------------|
+| 1000 | 5 | 1000 | 45 |
+| 1500 | 90 | 1500 | 10 |
+| 2000 | 5 | 2000 |45|
+
+Si se calcula la media aritmética en ambas distribuciones se obtiene un mismo valor $\bar{x_A}=\bar{x_B}=1500$. Incluso aunque se utilice un promedio alternativo como la mediana se puede observar que ambos valores también coinciden $Me(A) = Me(B) = 1500$. Ahora bien, ¿en qué se diferencian estos repartos salariales? ¿En que empresa es más representativa la media? De forma intuitiva es obvio que la media salarial obtenida en la empresa A es más representativa que la obtenida en B ya que los valores de la distribución en A se encuentran mucho más próximos al valor medio. En otras palabras, el grado de dispersión de los valores de la variable respecto al valor medio es menor en A que en B.
+
+Con el ejemplo anterior se pone de manifiesto la relación que existe entre la noción de dispersión de las observaciones y de representatividad de un promedio. Al aumentar la dispersión de las observaciones disminuye la representatividad del promedio. Así, para completar la información que puede deducirse de la media aritmética o de cualquier otra medida de tendencia central, ésta se acompañará siempre de uno o varios coeficientes que midan el grado de dispersión de la distribución.
+
+La lista de indicadores que miden el grado de dispersión de una variable estadística es muy amplia. En lo que sigue se mostrarán algunos de los más importantes.
+ 
+## Recorrido
+
+Una primera medida que puede informar del grado de dispersión de una distribución es el recorrido de la variable, efectivamente, en general a mayor recorrido existirá mayor dispersión en la variable. Ahora bien, como se puede observar en el ejemplo anterior esta medida tiene poca fiabilidad pues no se preocupa de como se encuentren distribuidas las observaciones dentro del intervalo marcado por los valores máximo y mínimo de la variable. 
+$$
+Re = \max{ \{x_i\}}-\min{\{x_i\}}
+$$
+
+El recorrido como medida de dispersión carece de sentido cuando se observa que la distribución de frecuencias presenta valores atípicos, tanto por exceso como por defecto, que pertubarán la calidad de esta medida de dispersión.
+
+## Recorrido intercuartílico
+
+Una alternativa al recorrido, que no se ve afectado por el problema anterior de los valores atípicos, es el **Recorrido Intercuartílico**, esto es, que **indica la amplitud del intervalo donde se encuentran el 50% de las observaciones centrales**. Aunque no es estrictamente cierto, cuanto menor sea el intervalo intercuartílico menor será la dispersión. 
+$$
+Re_I=C_3-C_1
+$$
+Ahora bien, hay que recordar que el objetivo no es el hablar de como se encuentran de dispersas las observaciones, sino de como se encuentran dispersas respecto a una medida de posición central. Con este fin se pueden definir las siguientes medidas.
+
+## La desviación media
+
+**Desviación media respecto a la media aritmética**
+
+Como medida de representatividad de la media aritmética se puede considerar la siguiente:
+
+$$
+D = {1 \over N}\sum_{i=1}^n(x_i-\bar x )n_i
+$$
+
+Pero como ya se comprobó en las propiedades de la media aritmética el valor de $D$ es inevitablemente cero ya que las desviaciones positivas se compensan con las desviaciones negativas. Para solucionar este problema se puede considerar no la diferencia entre cada observación y el valor medio, sino la distancia, es decir: 
+
+$$
+D_{\bar x} = {1 \over N}\sum_{i=1}^n|x_i-\bar x|n_i
+$$
+
+
+que se denomina **Desviación Media respecto a la media aritmética**. Un valor de grande dará una dispersión grande y por tanto poca representatividad del promedio.
+
+> **_La Desviación media es la media de la distancia de cada observación a la media aritmética_**
+
+En el ejemplo: 
+
+$$
+D_{\bar{x}}(A) = (|1000-1500| \cdot 5 + |1500-1500|\cdot 90 + |2000-1500|\cdot5)/100=50  \\
+D_{\bar{x}}(B) = (|1000-1500|\cdot 45 + |1500-1500|\cdot10 + |2000-1500|\cdot45)/100 = 450
+$$
+Así $\bar x_A$ es más representativa que $\bar x_B$ puesto que hay un mayor número de empleados cuyo salario coincide con la media aritmética.
+ 
+**La Desviación Media Respecto a la Mediana**
+
+Análoga medida a la presentada para la media aritmética se puede considerar para la mediana cuando ésta ha sido la medida de tendencia central elegida para sintetizar la información. La Desviación Media con respecto a la mediana se define pues como:
+ 
+$$
+D_{Me} = {1 \over N}\sum_{i=1}^n|x_i-Me|n_i
+$$
+
+La desviación media con respecto a la mediana es especialmente útil cuando los datos pueden contener valores atípicos ya que éstos pueden distorsionar otras medidas de dispersión, ya que $D_{Me}$ se basa en la mediana, que es resistente a valores extremos.
+
+>**_Las desviaciones medias tienen un significado preciso como "promedio de las desviaciones" pero tienen el inconveniente de no ser adecuadas para el cálculo algebraico ya que introducen la función valor absoluto. Se definirán por ello en el siguiente punto una serie de medidas alternativas que cuantifiquen la representatividad de los promedios sin hacer uso de la función valor _absoluto._** 
+
+
+## La varianza. La desviación típica. Propiedades.
+
+Cuando se intentaba medir la representatividad de la media aritmética mediante la suma de las desviaciones de cada observación respecto a la media aritmética se ha observado que esta suma $D$ vale cero porque existen diferencias positivas y negativas que se compensan. Como alternativa, la desviación media respecto a la media aritmética, ha tomado el valor absoluto de las diferencias. Otra alternativa a la hora de eliminar los signos es la de elevar estas diferencias a una potencia par, se elige la más simple de todas, esto es, elevar al cuadrado. Así aparece otra medida de representatividad de la media aritmética, la varianza: 
+$$
+s^2 = {1 \over N}\sum_{i=1}^n(x_i-\bar x)^2n_i
+$$
+
+Si el valor de es grande, la media aritmética será poco representativa y viceversa. El mejor de los casos es aquél en que la varianza toma el valor cero ya que esto indica que todos los sumandos son cero y por tanto cada uno de ellos, de donde se deduce que todos los valores de la variable coinciden con el valor medio.
+
+### Propiedades de la Varianza. 
+
+Se enuncian a continuación las propiedades más importantes de esta medida de dispersión.
+
+**Propiedad 1:** La varianza es siempre un número positivo o nulo. Esta propiedad es obvia ya que se trata de una suma de números al cuadrado.
+$$
+s^2 \geq 0
+$$
+
+**Propiedad 2:** La varianza es la medida de dispersión óptima ya que: 
+
+$$
+\min_k {1 \over N}\sum_{i=1}^n(x_i-k)^2n_i = {1 \over N}\sum_{i=1}^n(x_i-\bar x)^2n_i
+$$
+
+_Demostración:_ Se hará en clase
+
+**Propiedad 3:** La varianza es la media de los valores al cuadrado menos el cuadrado de la media
+
+$$
+s^2={1 \over N} \sum_{i=1}^nx_i^2n_i- \bar x^2
+$$
+_Demostración:_ Se hará en clase
+ 
+
+**Propiedad 4:** Si en una distribución de frecuencias se le suma a todos los valores de la variable una constante, la varianza no varía.
+
+$$
+Y = X + a \Rightarrow s^2_y=s^2_x
+$$
+
+_Demostración:_ Se hará en clase
+
+**Propiedad 5:** Al multiplicar los valores de la variable por una constate **b**, la varianza queda multiplicada por el cuadrado de dicha constante. 
+
+$$
+Y = bX  \Rightarrow s^2_y=b^2s^2_x
+$$
+
+_Demostración:_ Se hará en clase
+
+### La Desviación Típica.
+
+El problema que se puede plantear al utilizar la varianza como medida de dispersión del grado de representatividad de la media aritmética, es un problema de unidades de medida, ya que la varianza viene expresada en las unidades originales de la variable elevadas al cuadrado (este inconveniente no lo presentaban las desviaciones medias). Para solucionarlo, se crea otra medida de dispersión, la desviación típica (o estandar) que viene definida como la raíz cuadrada positiva de la varianza: 
+
+$$
+s= +\sqrt{s^2} 
+$$
+
+con lo que se obtiene una medida de dispersión con propiedades semejantes a la varianza pero cuyas unidades de medida son las mismas que las de la variable en origen.
+
+> **_La desviación típica viene expresada en las mismas unidades que la variable original_**
+
+Las propiedades de la desviación típica se derivan de aquellas obtenidas para la varianza.
+ 
+**Propiedad 1** La desviación típica es un número no negativo (obvia, se sigue de la propia definición).
+
+$$
+s \geq 0
+$$
+
+**Propiedad 2** Si en una distribución de frecuencias se les suma a todos los valores de la variable una constante, la desviación típica no varía. 
+
+$$
+Y = X + a \Rightarrow s_y=s_x
+$$
+
+_Demostración:_ Consecuencia inmediata de la Propiedad 4 para la varianza.
+
+**Propiedad 3** Al multiplicar los valores de la variable por una constate K, la desviación típica queda multiplicada por dicha constante.
+
+$$
+Y = bX + a \Rightarrow s_y=bs_x
+$$
+
+_Demostración:_ Consecuencia inmediata de la Propiedad 5 para la varianza.
+
+## La volatilidad de una acción
+
+La volatilidad de una acción es una medida de dispersión en estadística descriptiva que se utiliza en el contexto financiero para evaluar la variabilidad de los precios de una acción a lo largo del tiempo. La volatilidad mide cuán "volátil" o cuánto fluctúan los precios de una acción en un período determinado. Es una medida importante para los inversores y analistas financieros porque puede **indicar el nivel de riesgo** asociado con una inversión en esa acción.
+
+
+La volatilidad de una acción es una medida de dispersión en estadística descriptiva que se utiliza en el contexto financiero para evaluar la variabilidad de los precios de una acción a lo largo del tiempo. La volatilidad mide cuán "volátil" o cuánto fluctúan los precios de una acción en un período determinado. Es una medida importante para los inversores y analistas financieros porque puede indicar el nivel de riesgo asociado con una inversión en esa acción.
+
+> **_La desviación estándar es un indicador de la volatilidad de un activo financiero_**
+
+Importancia de la volatilidad en el análisis financiero:
+
+**Gestión de riesgos:** Los inversores utilizan la volatilidad para evaluar el riesgo asociado con una inversión. Una acción altamente volátil puede tener un mayor potencial de ganancia, pero también un mayor riesgo de pérdida. Los inversores pueden ajustar sus estrategias de inversión en función de la volatilidad esperada.
+
+**Diversificación de cartera:** La volatilidad es un factor importante en la construcción de carteras de inversión diversificadas. Incluir activos con diferentes niveles de volatilidad puede ayudar a reducir el riesgo global de la cartera.
+
+**Evaluación de oportunidades de inversión:** Los inversores pueden utilizar la volatilidad para identificar oportunidades de inversión. Por ejemplo, pueden buscar acciones con alta volatilidad si desean tomar posiciones especulativas o buscar acciones con baja volatilidad si buscan una inversión más estable.
+
+[Lectura sobre la volatilidad de activos financieros](https://www.ucm.es/data/cont/media/www/pag-41460/Volatilidad.pdf)
+
+# Medidas de dispersión relativas
+
+Puede ser de interés en el supuesto de poseer información sobre dos distribuciones de frecuencias distintas de las que se conocen sus promedios valorar mediante alguna medida en cual de las distribuciones este promedio es más representativo. En una primera aproximación se podrían comparar sus respectivas medidas de dispersión, para lo cual bastaría comparar ambos valores y elegir el menor. Ahora bien, es posible que las unidades de medidas en que vengan expresados sean distintas (por ejemplo no podemos comparar pesetas con dólares) en cuyo caso la comparación no tendría sentido. Así pues, es preciso construir medidas de dispersión que carezcan de unidades de medida (adimensionales). Estas son las llamadas medidas de dispersión relativas que siempre vendrán expresadas mediante un cociente.
+
+> _**La medidas de dispersión relativas son adimensionales**_
+
+## Coeficiente de apertura.
+
+Se define como:
+
+$$
+A = {\max{\{x_i\}} \over \min{\{x_i\}}}
+$$
+
+de tal forma que cuanto mayor sea $A$ mayor ser la dispersión. Este coeficiente tiene el problema de ser sensible a los valores atípicos de la distribución y no tener en cuenta como se encuentran distribuidos los valores de la variable entre el máximo y el mínimo.
+
+## Recorrido Relativo.
+
+Se define como: 
+
+$$
+Re_r = {\max{ \{x_i\}}-\min{\{x_i\}} \over \bar x}
+$$
+Coeficiente basado en el recorrido como medida de dispersión absoluta, y tiene los mismos problemas que ésta.
+
+## Recorrido Semi intercuartílico
+
+El recorrido semi intercuartílico es una medida de dispersión que permite evaluar la variabilidad de un conjunto de datos, particularmente en relación con los valores que se encuentran en el rango intercuartílico $R_{I}=C_2-C_1$. El rango intercuartílico abarca el 50% central de los datos. 
+
+El recorrido semi intercuartílico se define como:
+
+$$
+Re_{si}={ {C_3-C_1}\over {C_3+C_1} }
+$$
+ 
+> _**El recorrido semi intercuartílico es una medida de dispersión que se utiliza para evaluar la variabilidad de los valores que se encuentran en la mitad central de un conjunto de datos. Es especialmente útil cuando se desean identificar valores extremos (outliers) que están más allá de un cierto número de recorridos semi intercuartílicos desde los cuartiles**_
+
+## Coeficiente de variación de Pearson
+
+Coeficiente de Variación de Pearson. Se define como: 
+
+$$
+CV= {s \over {\bar x}}
+$$
+
+Está basado en la desviación típica y por tanto es el que mejores resultados ofrece. Este coeficiente indica el número de veces que la desviación típica contiene a la media aritmética. Puede ofrecer valores positivos o negativos dependiendo del signo de la media. 
+
+Si el valor de CV es próximo a cero indicará una alta concentraciónbaja dispersión de los valores de la variable en torno al valor medio, esto es poca dispersión, por el contrario, cuanto mayor sea su valor más dispersas estarán las observaciones. 
+
+El coeficiente de variación de Pearson tiene el problema de que no es calculable cuando la media es cero, incluso la información que suministra queda deformada cuando el valor de la media es un número próximo a cero.
+Indice de Dispersión Respecto a la Mediana. 
+
+Por razones totalmente análogas a la obtención del coeficiente de variación de Pearson se define el coeficiente de dispersión respecto a la mediana: 
+
+# Ejemplo
+
+Las notas en varias de las materias de las PAU en 2018 fueron las siguientes
+
+<!-- | Materia | De 0 a 5 | De 5 a 6 | De 6 a 7 | De 7 a 8 | De 8 a 9 | De 9 a 10 | $\bar x$ | $s$ | $CV$ | -->
+<!-- |----------|-----|-----|-----|-----|-----|------|---|---|---| -->
+<!-- | LENGUA | 0.170 | 0.185 | 0.208 | 0.200 | 0.149 | 0.087 | 6.39 | 2.12 | 0.33 | -->
+<!-- | HISTORIA | 0.243 | 0.155 | 0.157 | 0.163 | 0.144 | 0.137 | 6.24 | 2.44 | 0.39 | -->
+<!-- | INGLÉS | 0.179 | 0.129 | 0.152 | 0.177 | 0.183 | 0.179 | 6.74 | 2.34 | 0.35 | -->
+<!-- | MAT II | 0.274 | 0.158 | 0.148 | 0.147 | 0.130 | 0.142 | 6.08 | 2.51 | 0.41 | -->
+<!-- | MAT CCSS | 0.270 | 0.149 | 0.148 | 0.150 | 0.138 | 0.144 | 6.13 | 2.52 | 0.41 | -->
+<!-- | ECON EMPRESA | 0.383 | 0.149 | 0.128 | 0.202 | 0.106 | 0.032 | 5.33 | 2.41 | 0.45 | -->
+<!-- | QUÍMICA | 0.430 | 0.204 | 0.097 | 0.161 | 0.065 | 0.043 | 4.99 | 2.37 | 0.47 | -->
+<!-- | BIOLOGÍA | 0.195 | 0.092 | 0.080 | 0.253 | 0.230 | 0.149 | 6.79 | 2.38 | 0.35 | -->
+<!-- | FISICA | 0.303 | 0.106 | 0.167 | 0.212 | 0.197 | 0.015 | 5.83 | 2.38 | 0.41 | -->
+
+```{=html}
+<iframe title="Notas PAU 2018. Varias materias" aria-label="Barras divididas" id="datawrapper-chart-btlvO" src="https://datawrapper.dwcdn.net/btlvO/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="300" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
+</script>
+```
+
+Los resultados sobre la dispersión
+
+```{=html}
+<iframe title="Notas PAU 2018. Varias materias. Indicadores dispersión" aria-label="Barras divididas" id="datawrapper-chart-f67D0" src="https://datawrapper.dwcdn.net/f67D0/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="300" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
+</script>
+```
+

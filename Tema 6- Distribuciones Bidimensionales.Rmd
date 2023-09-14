@@ -1,0 +1,230 @@
+---
+title: "<strong>Estadística Empresarial I</strong> <br> <br> Tema 6: Distribuciones bivariantes"
+author:
+- <strong>Fernando A. López</strong> <br> Catedrático de Universidad <br> Facultad de CC de la Empresa <br> Universidad Politécnica de Cartagena <br> <br> <br>
+date: "`r Sys.Date()` <br>"
+output:
+  bookdown::html_document2:
+    number_sections: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: yes
+      smooth_scroll: no
+    toc_title: Article Outline
+    self_contained: true
+
+# output: 
+#   rmarkdown::html_vignette:
+#     number_sections: TRUE
+
+linkcolor: red
+link-citations: yes
+# bibliography: ["bibliospq.bib"]
+vignette: |
+  %\VignetteIndexEntry{spsur user guide}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown} 
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{=html}
+<style type="text/css">
+ body{
+ font-size: 14pt;
+ text-align: justify
+}
+h1.title {
+ color: DarkRed;
+}
+h1 { /* Header 1 */
+ color: DarkBlue;
+}
+h2 { /* Header 2 */
+ color: DarkBlue;
+}
+h3 { /* Header 3 */
+ color: DarkBlue;
+}
+</style>
+```
+
+```{r include=FALSE}
+knitr::opts_chunk$set(fig.path = 'figurasR/',
+ echo = FALSE, warning = FALSE, message = FALSE,
+ fig.pos="H",fig.align="center",out.width="95%",
+ cache=FALSE)
+
+```
+
+
+# Conceptos Generales
+
+Los temas anteriores han estado dedicados al estudio individualizado de una sola variable, aislándola de cualquier interrelación que pueda tener con otras características del fenómeno que deseemos estudiar. Se abre un bloque de temas destinados a estudiar de forma conjunta grupos de variables que sospechamos guardan algún tipo de dependencia o asociación.
+
+Las distribuciones bidimensionales se refieren a la descripción conjunta de dos variables. A diferencia de las distribuciones unidimensionales, que se centran en una sola variable, las distribuciones bidimensionales permiten analizar la relación y la interacción entre dos variables simultáneamente. Estas distribuciones se utilizan para resumir y visualizar datos que involucran dos características o variables diferentes.
+
+> **_Las distribuciones bidimensionales permiten analizar la relación y la interacción entre dos variables_**
+
+La nueva situación que se planta en este tema es la siguiente: tenemos una población de la cual deseamos estudiar dos o más características, supongamos para simplificar que estas son $X$ e $Y$, el primer paso debe ser la observación de esta variable en un conjunto de la población, y aquí radica la principal diferencia con lo que hemos estudiado hasta ahora. Cada observación será un par de la forma $(x_i,y_i)$, esto es, observaremos en cada individuo simultáneamente todas las variables de nuestro interés.
+
+> **_Cada observación será un par de la forma $(x_i,y_i)$_**
+
+
+# Distribuciones bidimiensionales
+
+En primer lugar debe presentarse la información de forma ordenada al igual que se hacía con las distribuciones unidimensionales. Las tablas de doble entrada son la forma más adecuada de disponer los resultados de nuestras observaciones.
+
+De forma genérica supongamos dos variables $(X,Y)$ de las que se han obtenido las siguientes observaciones, $(x_1,y_1); \ (x_2,y_2); \ ... ; \ (x_n,y_n)$
+
+En primer lugar se deben identificar los diferentes valores que toman las variables $X$ e $Y$. Supongamos que estos valores son $x_1,x_2, ... ,x_r$ para la variable X e $y_1,y_2, ... ,y_s$ para la variable $Y$. En segundo lugar, se contabiliza el número de veces que se repite la observación $(x_i,y_j)$. Este valor lo denotaremos por $n_{ij}$ (frecuencia absoluta). La tabla pues tendrá la siguiente forma
+
+<center>
+|  | <bf>$y_1$ | $y_2$ | ... |$y_s$ |
+|:-:|:-:|:-:|:-:|:-:|
+| $x_1$ | $n_{11}$ | $n_{12}$ | ... |$n_{1s}$ |
+| $x_2$ | $n_{21}$ | $n_{22}$ |  ... |$n_{2s}$ |
+| ...  | ... | ... | ... |... |
+| $x_r$  | $n_{r1}$ | $n_{r1}$ | ... |$n_{rs}$ |
+</center>
+
+> **_Estas tablas reciben el nombre de tablas de correlación (si las variables objeto de estudio fueran cualitativas reciben el nombre de tablas de contingencia)_**
+
+
+Como un simple ejemplo podemos pensar en estudiar las variables $X$=número de hijos e $Y$=edad del padre en un conjunto de individuos. Supongamos que las observaciones de estas variables han sido las siguientes:
+
+(1,28);(2,29);(0,27);(1,29);(3,30);(4,30);(0,29);(0,28);(4,28);
+
+(0,29);(1,30);(2,27);(2,28);(4,30);(3,29);(1,29);(2,28);(1,27)
+
+La variable $X$ toma los valores 0,1,2,3,4 y la variable $Y$ los valores 27,28,29,30 la tabla después de calcular las frecuencias absolutas quedara como:
+
+<center>
+| X\Y | 27 | 28 | 29 |30 |
+|:-:|:-:|:-:|:-:|:-:|
+| 0  | 0 | 0 | 0 |0 |
+| 1  | 0 | 0 | 0 |0 |
+| 2  | 0 | 0 | 0 |0 |
+| 3  | 0 | 0 | 0 |0 |
+| 4  | 0 | 0 | 0 |0 |
+</center>
+
+Este mismo proceso que aquí hemos desarrollado para variables sin agrupar por intervalos se aplica igualmente cuando las variables están agrupadas en intervalos.
+
+## Distribuciones marginales
+
+A partir de las tablas de doble entrada es posible extraer la información correspondiente a cada una de las variables, **independientemente de la otra**, ya que su análisis como variable unidimensional puede ser de utilidad. Se definen las distribuciones marginales como aquellas variables unidimensionales extraídas de una distribución bidimensional.
+
+Para extraer la distribución marginal correspondiente a la variable $X$ (que se también se llama marginal primera) debemos obtener los distintos valores que toma la variable, esto es $x_1,x_2, ... ,x_r$ y contabilizar el número de veces que se repite cada observación independientemente de los valores que tome la variable $Y$, esto es la frecuencia absoluta que ahora nombraremos con $n_{i.}$.
+
+El número de veces que se repite el valor $x_i$ será según lo anterior:
+
+$$
+n_{i.} = \sum_{j=1}^s n_{ij}
+$$
+lógicamente la suma de todas estas frecuencias absolutas debe coincidir con el numero total de observaciones N. Esto es,
+
+$$
+\sum_{i=1}^rn_{i.}=N
+$$
+
+Idéntico razonamiento se realizar con la variable $Y$, obteniendo la marginal segunda.
+
+## Distribuciones condicionales
+
+Otras distribuciones unidimensionales que pueden extraerse de las tablas de doble entrada, son las **distribuciones condicionales**, esto es, aquellas que muestran los valores que toma una variable sabiendo fijo un valor para la otra. Así la distribución condicionada de $X$ cuando $Y$ toma el valor $y_j$ es:
+
+$$
+(X|_{Y=y_j})
+$$
+
+Análogamente, la distribución condicionada de $Y$ cuando $X$ toma el valor $x_i$ ( 17) es
+
+$$
+(Y|_{X=x_i})
+$$
+
+# Momentos
+
+Los **momentos** de una distribución de dos variables se refieren a las medidas estadísticas que describen aspectos específicos de la distribución conjunta de esas dos variables. Estos momentos proporcionan información sobre la forma y la tendencia de la distribución conjunta.
+
+> **_Se diferencian dos tipos de momentos: repecto al origen y con respecto a la media_**
+
+## Momentos respecto al origen
+
+Se define el momento con respecto al origen de la variable bidimensional (X,Y) de orden k,l a la expresión:
+
+$$
+a_{kl}=\sum_{i=1}^r\sum_{j=1}^sx_i^ky_j^l n_{ij}
+$$
+
+lógicamente los momentos de orden (0,l) ($a_{0l}$) coincidir n con los momentos de la marginal segunda y los momentos de orden (k,0) ($a_{k0}$) con los momentos respecto al origen de la marginal primera.
+
+## Momentos respecto a la media
+
+De forma totalmente semejante se definen los momentos con respecto a la media de orden k,l de la variable bidimensional $(X,Y)$
+
+$$
+m_{kl} = \sum_{i=1}^r\sum_{j=1}^s(x_i- \bar x)^k(y_j- \bar y)^l n_{ij}
+$$
+
+de igual forma que en el apartado anterior los momentos de orden (0,l) ($m_{0l}$) coincidir n con los momentos de la marginal segunda y los momentos de orden (k,0) ($m_{k0}$) con los momentos respecto a la media de la marginal primera.
+
+# La covarianza
+
+De entre todos lo momentos presentados hay uno que tiene una mayor importancia que los restantes debido a la información que suministra sobre la relación de las variables que intervienen en el estudio. Este momento es el momento con respecto a la media de orden 1,1 que a partir de ahora llamaremos **Covarianza**, esto es:
+
+$$
+m_{11} = Cov(X,Y) = s_{XY} = \sum_{i=1}^r\sum_{j=1}^s(x_i- \bar x)(y_j- \bar y) n_{ij}
+$$
+
+Al igual que ocurra con los momentos unidimensionales, los momentos bidimensionales con respecto a la media también tienen su expresión respecto a los momentos con respecto al origen. En el caso de la covarianza:
+
+$$
+m_{11} = a_{11}-a_{10} a_{01}=a_{11}- \bar x \bar y
+$$
+
+la expresión del momento de orden 1,1 respecto al origen coincide con el siguiente producto matricial que en muchas situaciones puede agilizar el cálculo de la covarianza.
+
+# Independencia estadística
+
+El principal objetivo de estudiar conjuntamente dos variables estadística $X$ e $Y$ es conocer si existe o no relación entre ellas. Es por tanto necesario definir formalmente el concepto de independencia estadística.
+
+> **_Importancia de la independencia: La independencia estadística es importante en estadística descriptiva porque influye en la interpretación de los resultados. Si las variables son independientes, es más fácil resumir y analizar los datos de manera separada. Por otro lado, si las variables están relacionadas o son dependientes, es necesario considerar esta relación al interpretar los resultados_**
+
+Diremos que dos variables $X$,$Y$ son independientes estadísticamente cuando la frecuencia relativa conjunta coincida con el producto de las frecuencias relativas de las distribuciones marginales, es decir:
+
+$$
+{n_{ij} \over N} ={n_{i.} \over N}{n_{.j} \over N} \ \ (\forall i,j)
+$$
+
+
+Algunas propiedades pueden deducirse de las variables estadísticas independientes:
+
+**Propiedad 1:** Si las variables $X$ e $Y$ son independientes entonces las frecuencias relativas de las distribución condicional de $(X|_{Y=y_j})$ (respectivamente de $(Y|_{X=x_i})$ coincide con las frecuencias relativas de la marginal primera $X$ (respectivamente de la marginal segunda $Y$). 
+
+_Demostración:_ En clase
+
+**Propiedad 2:**  Si dos variables $X$ e $Y$ son independientes entonces su covarianza es cero: $s_{xy} = 0$.
+
+_Demostración:_ En clase
+
+Debemos apuntar ahora que de esta propiedad no tiene porque ser cierto su recíproco. Esto es, 
+
+> **_Si la covarianza entre dos variables es cero, éstas no tienen porque ser independientes_** 
+
+> **_Si dos variables tienen covarianza cero se denominan incorreladas_**
+
+$$
+Independencia \ \Rightarrow  \ Covarianza  \ cero. \\
+Covarianza \ cero \  \nRightarrow  \ Independencia
+$$
+
+La independencia estadística es una propiedad más fuerte que la incorrelación.
+
+Cuando dos variables estadísticas no son independientes hay dos cuestiones relevantes que deben plantearse:
+
+- ¿Cómo evaluar la intensidad de la relación?
+- ¿Cuál es la forma funcional que liga la relación entre las variables?

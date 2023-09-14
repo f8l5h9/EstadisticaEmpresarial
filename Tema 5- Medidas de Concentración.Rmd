@@ -1,0 +1,242 @@
+---
+title: "<strong>Estadística Empresarial I</strong> <br> <br> Tema 5: Medidas de Concentración"
+author:
+- <strong>Fernando A. López</strong> <br> Catedrático de Universidad <br> Facultad de CC de la Empresa <br> Universidad Politécnica de Cartagena <br> <br> <br>
+date: "`r Sys.Date()` <br>"
+output:
+  bookdown::html_document2:
+    number_sections: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: yes
+      smooth_scroll: no
+    toc_title: Article Outline
+    self_contained: true
+
+# output: 
+#   rmarkdown::html_vignette:
+#     number_sections: TRUE
+
+linkcolor: red
+link-citations: yes
+# bibliography: ["bibliospq.bib"]
+vignette: |
+  %\VignetteIndexEntry{spsur user guide}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown} 
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-size: 14pt;
+  text-align: justify
+}
+h1.title {
+  color: DarkRed;
+}
+h1 { /* Header 1 */
+  color: DarkBlue;
+}
+h2 { /* Header 2 */
+  color: DarkBlue;
+}
+h3 { /* Header 3 */
+  color: DarkBlue;
+}
+</style>
+```
+
+```{r include=FALSE}
+knitr::opts_chunk$set(fig.path = 'figurasR/',
+                      echo = FALSE, warning = FALSE, message = FALSE,
+                      fig.pos="H",fig.align="center",out.width="95%",
+                      cache=FALSE)
+
+```
+
+# Introducción
+
+Aún cuando “dispersión” y “concentración” tienen significados opuestos en un contexto general del lenguaje, el significado estadístico de ambos conceptos no coinciden con el que habitualmente se da a ambos vocablos.
+
+Desde el punto de vista estadístico la “dispersión” hace referencia a la variabilidad de los datos, a la diferencias que entre ellos existe y, por tanto, a la mayor o menor representatividad de los promedios. 
+
+Las medidas de concentración, sin embargo, tratan de poner de relieve el mayor o menor grado de igualdad en el reparto total de los valores de la variable. Son, por tanto, indicadores del grado de equidistribución de la variable.
+
+> _**Las medidas de concentración dan información sobre la equidad del reparto de una magnitud entre un conjunto de individuos. Estas medidas son especialmente relevantes en el campo de la economía, la demografía y otras disciplinas sociales y económicas donde se estudian distribuciones de ingresos, riqueza, recursos o cualquier otra variable que pueda ser compartida por diferentes agentes**_
+
+La noción de “concentración” fue introducida por el estadístico italiano [Corrado Gini](https://es.wikipedia.org/wiki/Corrado_Gini), a propósito de la distribución de salarios y rentas.La introducción de la noción de concentración por parte de Corrado Gini ha tenido un impacto duradero en la investigación y el análisis de la desigualdad económica y ha contribuido significativamente a la comprensión de cómo se distribuyen los recursos y las riquezas en una sociedad. Su trabajo ha sido fundamental para el estudio de la desigualdad y ha dejado una huella importante en el campo de la estadística y la economía.
+
+Los dos principales indicadores de concentraciñon, el coeficiente de Gini y la curva de Lorenz, que también fue desarrollada por Gini, se han convertido en herramientas fundamentales en la economía y en la sociología para analizar y comprender la desigualdad en diferentes contextos y regiones. Estas medidas han sido utilizadas para evaluar la equidad en la distribución de ingresos a nivel nacional e internacional, y han influido en la formulación de políticas económicas y sociales destinadas a abordar la desigualdad.
+
+En general se aplica a la descripción de unidades económicas según el tamaño: empresas según ventas, número de asalariados, de producción, etc.
+
+Se quiere estudiar por ejemplo una distribución de salarios, y sean $x_1 \leq x_2 \leq \dots \leq x_n$ los $n$ sueldos objeto de estudio. Lo que se pretende estudiar es hasta que punto la masa salarial $\sum x_i$ está equitativamente repartida. Existen dos casos extremos, por un lado la equidistribución, esto es, todos cobran la misma cantidad (es decir, $x_1 = x_2 = \dots = x_n$). El otro extremo se presenta cuando un solo trabajador percibe el total de la masa salarial y los restantes no perciban nada, es decir, .
+
+$$
+x_1 = x_2 = \dots = x_{n-1}=0 \\
+x_n \neq 0
+$$
+
+Entre estos dos extremos se pueden encontrar infinitas situaciones intermedias. Por tanto el objetivo de este tema será buscar un coeficiente que mida el grado de equidistribución de la variable. Este coeficiente será el llamado Indice de Concentración de Gini.
+
+**Coeficiente de Gini:** El coeficiente de Gini es una medida de concentración utilizada en economía y ciencias sociales para evaluar la desigualdad en la distribución de ingresos o riqueza. Varía entre 0 (igualdad perfecta) y 1 (desigualdad total), donde valores más altos indican una mayor concentración de ingresos o riqueza en un grupo selecto.
+
+**Índice de Herfindahl-Hirschman (IHH):** Este índice se utiliza en economía y competencia empresarial para medir la concentración de mercado. Evalúa la participación de las empresas en un mercado específico y varía entre 0 (perfecta competencia) y 1 (monopolio).
+
+
+# El índice de concentración de Gini.
+
+Se acompañarán los razonamientos para el cálculo de este índice del siguiente ejemplo:
+En el sector textil, la distribución de ventas entre las empresas fue la siguiente:
+ 
+
+Ventas (€)	| Nº de empresas
+|-------------------|-------------|
+|100-400	| 5|
+|400-1.000	| 15|
+|1.000-2.000	| 30|
+|2.000-5.000	| 50|
+|5.000-10.000	| 20|
+|10.000-20.000	| 10|
+
+El problema a resolver es cómo calcular el índice de concentración del sector.
+
+Sea una distribución de ventas $(x_i,n_i)$. A partir de esta distribución de frecuencias se forman las siguientes columnas:
+
+a) Los productos $x_in_i$, que indicarán la venta total percibida por los individuos de la clase (volumen de ventas de la clase).
+
+b) Frecuencias absolutas acumuladas $N_i$.
+
+c) Los totales acumulados 
+
+$$
+u_k = \sum_{i=1}^k x_in_i
+$$
+
+
+
+donde $u_i$ indicará el volumen total de ventas de las $N_i$ primeras empresas.
+
+d) Las frecuencias absolutas acumuladas expresadas en tantos por cien.,
+ 
+$$
+p_i={N_i \over N}100
+$$
+
+e) Los totales acumulados expresados en tantos por cien:
+
+$$
+q_i={u_i \over u_n}100
+$$
+
+El cálculo de estas expresiones para el ejemplo de las empresas del sector textil da como resultado los siguientes valores:
+
+<center>
+|$x_i$|$n_i$|$x_in_i$|$N_i$|$u_i$|$p_i$|$q_i$|$p_i-q_i$| 
+|:-----:|:-----:|:-----:|:-----:|:---:|:--:|:----:|:-----:|
+|250	|5	|1.250	| 5	|1.250|3,85	|0,24|3,61|
+|700	|15	|10.500|20	|11.750	|15,38	|2,21|13,17|
+|1.500	|30	|45.000	|50	|56.750|	38,46	|10,67|27,79|
+|3.500	|50	|175.000	|100	|231.750	|76,92	|43,58|33,34|
+|7.500	|20	|150.000	|120	|381.750	|92,31	|71,79|20,52
+|15.000	|10	|150.000	|130	|531.750	|100	|100|--|
+</center>
+
+Si se ponen en relación las dos últimas columnas se obtiene la información buscada sobre el “reparto” de las ventas. 
+
+La tabla que se acaba de presentar se puede leer de la siguiente forma:
+
+- El 3,85% de las empresas con menor volumen de ventas apenas se reparten el 0,24% del mercado.
+- El 15,38% de las empresas con menor volumen de ventas apenas se reparten el 2,21% del mercado.
+- El 38,46% de las empresas con menor volumen de ventas apenas se reparten el 10,67% del mercado, y así sucesivamente.
+
+También se puede leer la información de otra manera:
+
+- El 7,69% de las empresas con mayor volumen de ventas tienen en su poder el 28,21% del mercado.
+
+Así pues, para dar una idea de la equidistribución de la variable se pueden considerar las diferencias $p_i-q_i$. Si la distribución fuese equitativa todos los valores de coincidirían con los de y por tanto la suma de todas las diferencias sería cero.
+
+$$
+\sum_{i=1}^{n-1}p_i-q_i
+$$
+
+Esta suma tiene como cota superior 
+ 
+$$
+\sum_{i=1}^{n-1}p_i
+$$
+
+ya que el máximo valor que alcanzan las diferencias se obtendría cuando los valores de fuesen cero. A partir de este razonamiento se puede considerar el cociente: 
+$$
+I_G={{\displaystyle\sum_{i=1}^{n-1}p_i-q_i} \over {\displaystyle\sum_{i=1}^{n-1}p_i}} 
+$$
+
+de tal forma que por un lado se crea una medida adimensional y por otro se consigue que su cota superior sea 1 obteniendo así un indicador cuyo campo de variación está comprendido entre 0 y 1. Será cero cuando la distribución sea equitativa y 1 cuando una parte reciba el total y la restante nada.
+Este cociente que puede expresarse en tanto por cien,
+ 
+$$
+I_G={{\displaystyle\sum_{i=1}^{n-1}p_i-q_i} \over {\displaystyle\sum_{i=1}^{n-1}p_i}} 100
+$$
+
+
+se llama Indice de Gini.
+
+Para el ejemplo con el que se ha planteado el problema se obtendía:
+$$
+I_G = 0,43
+$$
+
+## Índice de Gini. Datos Expansión
+
+https://datosmacro.expansion.com/demografia/indice-gini
+
+
+<iframe title="índice de Gini. Riesgo de pobreza" aria-label="Interactive line chart" id="datawrapper-chart-T1ks4" src="https://datawrapper.dwcdn.net/T1ks4/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="400" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
+</script>
+
+# La curva de Lorenz. Propiedades.
+
+La representación gráfica es otra forma alternativa de comparar las columnas $p_i$ y $q_i$. Con este fin se representan en los ejes cartesianos los puntos $(p_i,q_i)$, uniéndolos mediante una línea quebrada que recibe el nombre de curva de Lorenz. Por otra parte se representan las curvas correspondientes a máxima y mínima concentración para compararlas con la curva de Lorenz y observar lo próximas o alejadas que se encuentran de ella.
+
+La curva de concentración mínima, equivalente a la equidistribución, es la bisectriz del primer cuadrante ya que $p_i=q_i$ para todo i. Mientras que la curva de máxima concentración son los lados del cuadrado determinados por los puntos (0,0) (100,0) y (100,0) (100,100). 
+
+<center>
+![Ejemplo gráfico de la Curva de Lorenz](/Users/fernandoair/Library/CloudStorage/Dropbox/EstadisticaEmpresarial/figurasR/CurvaLorenz.png)
+</center>
+
+## Propiedades
+
+Esta curva verifica una serie de propiedades cuyo enunciado es el siguiente: 
+
+**Propiedad 1** La curva siempre se mantiene bajo la diagonal. Es decir, siempre ocurre que:
+
+$$
+p_i > q_i \ \ (\forall{i})
+$$
+
+_Demostración:_ Sin demostración
+
+
+**Propiedad 2** La curva de Lorenz es no decreciente. 
+
+Al ser los valores “frecuencias” acumuladas no pueden plantearse situaciones decrecientes. Es decir,
+
+$$
+q_i \leq q_{i+1} \ \ (\forall{i})
+$$
+**Propiedad 3:** Existe una relación aproximada entre el ínidce de Gini y la Curva de Lorenz, de tal forma que:
+$$
+I_G={A  \over A+B}
+$$
+<center>
+![](/Users/fernandoair/Library/CloudStorage/Dropbox/EstadisticaEmpresarial/figurasR/CurvaLorenz2.png)
+</center>
+
+Por último, cabe señalar que si bien el índice de Gini tiene la ventaja de resumir en una sola cifra las complejas informaciones expresadas por la curva de Lorenz, y por lo mismo permite más fácilmente que la curva comparar la concentración de dos distribuciones, esta ventaja tiene su contrapartida: dos distribuciones de aspectos muy diferentes pueden tener dos índices de concentración del mismo valor. Veámoslo con un ejemplo:
+
+

@@ -1,0 +1,342 @@
+---
+title: "<strong>Estadística Empresarial I</strong> <br> <br> Tema 1: Distribuciones de frecuencia <br>"
+author:
+- <strong>Fernando A. López</strong> <br> Facultad de CC de la Empresa <br> Universidad Politécnica de Cartagena <br> <br> <br>
+date: "`r Sys.Date()` <br>"
+output:
+  bookdown::html_document2:
+    number_sections: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: yes
+      smooth_scroll: no
+    toc_title: Article Outline
+    self_contained: true
+
+# output: 
+#   rmarkdown::html_vignette:
+#     number_sections: TRUE
+
+linkcolor: red
+link-citations: yes
+# bibliography: ["bibliospq.bib"]
+vignette: |
+  %\VignetteIndexEntry{spsur user guide}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown} 
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-size: 14pt;
+  text-align: justify
+}
+h1.title {
+  color: DarkRed;
+}
+h1 { /* Header 1 */
+  color: DarkBlue;
+}
+h2 { /* Header 2 */
+  color: DarkBlue;
+}
+h3 { /* Header 3 */
+  color: DarkBlue;
+}
+</style>
+```
+
+```{r include=FALSE}
+knitr::opts_chunk$set(fig.path = 'figurasR/',
+                      echo = FALSE, warning = FALSE, message = FALSE,
+                      fig.pos="H",fig.align="center",out.width="95%",
+                      cache=FALSE)
+
+```
+
+<!-- \setcounter{chapter}{2} -->
+<!-- \setcounter{chapter}{2} escribir 2 para capítulo 3  -->
+<!-- \pagenumbering{arabic} -->
+
+\ifdefined\ifprincipal
+\else
+\setlength{\parindent}{1em}
+\pagestyle{fancy}
+\setcounter{tocdepth}{4}
+\tableofcontents
+<!-- \nocite{*} -->
+\fi
+
+\ifdefined\ifdoblecara
+\fancyhead{}{}
+\fancyhead[LE,RO]{\scriptsize\rightmark}
+\fancyfoot[LO,RE]{\scriptsize\slshape \leftmark}
+\fancyfoot[C]{}
+\fancyfoot[LE,RO]{\footnotesize\thepage}
+\else
+\fancyhead{}{}
+\fancyhead[RO]{\scriptsize\rightmark}
+\fancyfoot[LO]{\scriptsize\slshape \leftmark}
+\fancyfoot[C]{}
+\fancyfoot[RO]{\footnotesize\thepage}
+\fi
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+
+# Distribuciones estadísticas de un carácter
+
+Las distribuciones estadísticas de un carácter se refieren a la forma en que se distribuyen los valores de una única variable o atributo en un conjunto de datos. Estas distribuciones proporcionan información importante sobre la naturaleza y la variabilidad de la variable. 
+
+# Variable estadística discreta y continua
+
+Se denomina variable estadística al fenómeno objeto de estudio de una población. La característica objeto de estudio de una determinada población puede ser fundamentalmente de dos tipos, bien cuantitativa bien cualitativa. Si la característica es cuantitativa, esto es las observaciones que se obtienen pueden ser expresadas mediante números, se le llamará **variable**, y los
+valores que se vayan obteniendo de la muestra se denominarán "valores que toma la variable". Por otro lado, si la característica que se observa no se puede cuantificar se le llamará **atributo** y a las distintas observaciones "Modos" o "Modalidades". Estas además no pueden colocarse en ningún orden lógico. 
+
+Dentro de las variables estadísticas se diferencian, al menos teóricamente, dos grupos:
+
+-   **Variables Continuas:** Son aquellas para las que entre dos observaciones cualesquiera es siempre posible encontrar infinitos valores intermedios. Como ejemplos de este tipo de variables se pueden citar todas aquellas características de la población que estén referidas a altura, temperatura, tiempo o peso.
+
+-   **Variables Discretas:** Son aquellas para las que entre dos valores de la variable es solo posible encontrar una cantidad finita de valores intermedios. En este caso se puede citar como ejemplos: el número de miembros de las unidades familiares de un determinado colectivo, el número de pulsaciones de una mecanógrafa, el número de anuncios de TV emitidos entre programas, etc.
+
+Las variables se denotarán generalmente mediante letras mayúsculas $X$, $Y$, $Z$ y los valores que toman éstas mediante la correspondiente letra minúscula acompañada de un subíndice, por ejemplo, $x_i$, $y_i$ o $z_i$.
+
+# Distribuciones de frecuencias
+
+Una de la etapas del análisis estadístico es la presentación y ordenación de los datos estadísticos. En este apartado se presentan los distintos pasos que deben seguirse para realizar de forma adecuada la presentación ordenada de un conjunto de datos, distinguiendo entre aquellos datos que no deben ser agrupados en categorías frente a aquellos que debido al alto volumen de observaciones distintas deban de ser agrupados.
+
+## Distribuciones no agrupadas en intervalos
+
+Este tipo de agrupaciones se realizan cuando el número de observaciones no es muy grande y/o hay pocos valores de variable distintos. Son frecuentes cuando se trabaja con variables discretas.
+
+> **_Distribuciones no agrupadas: pocos valores distintos_**
+
+Con el fin de hacer más comprensible el método a seguir, éste se llevará a cabo con el siguiente ejemplo en el que se considera un grupo de empresas de las que se ha obtenido información sobre el número de empleados. Los resultados obtenidos han sido los siguientes:
+
+$$
+2, 2, 5, 4, 3, 5, 4, 2, 2, 1, 1, 1, 3, 4, 2, 3, 5, 1, 5, 4
+$$ 
+
+Así se tiene una variable estadística que denotaremos como $X$:
+
+$$X = Número \ \ de \ \ empleados\ \ de \ \ la \ \ empresa $$
+
+El primer paso que se debe dar es obtener todos los valores distintos que ha tomado la
+variable. En el caso de este ejemplo, los valores que toma la variable son: 1, 2, 3, 4 y 5. Estos valores se presentan en una columna escribiendo junto a cada valor de la variable el número de veces que se repite cada observación. Este número se llama **Frecuencia absoluta** y se denota de forma genérica como $n_i$. El resultado de este proceso será una tabla tal y como se muestra en la tabla:
+
+```{r, echo = FALSE}
+dis <- data.frame(x=c(1,2,3,4,5),n=c(4,5,3,4,4))
+names(dis) <- c("x~i~","n~i~")
+```
+
+```{r tab:aa, echo = FALSE}
+# knitr::kable(
+#  head(dis, 20), caption = 'Distribución de frecuencias',
+#  booktabs = TRUE
+# )
+library(dplyr)
+library(kableExtra)
+dis %>%
+  kbl() %>%
+  kable_paper("hover", full_width = F)
+```
+
+Se denomina **Distribución de frecuencias**, a una tabla en la que se presenten por un lado los distintos valores que ha tomado la variable y por otro la frecuencia absoluta de cada uno de estos valores. Generalmente se representan por $(x_i,n_i)$
+
+Se utilizan también otros tipos de frecuencias equivalentes a las frecuencias absolutas. Son las siguientes:
+
+**Frecuencia Absoluta Acumulada:** Indica el número de datos iguales al considerado e
+inferiores a él. Se denotan por $N_i$ , y se pueden expresar también como:
+
+$$
+N_i = n_1 +n_1 +...+n_i  =\sum_{j=1}^{i}{n_j}
+$$
+Al número total de observaciones que se obtienen de una variable se le designa por $N$ , mientras que el número de observaciones distintas será denotado siempre como $n$. 
+
+**Frecuencia relativa:** es igual a la frecuencia absoluta dividida por el número total de datos. Se representa por $f_i$
+
+$$
+f_i = {n_i \over N}
+$$
+La frecuencia relativa informa del número de veces que se repite cada observación en proporción con el resto de las observaciones. Esto es, si se multiplica por 100 las frecuencias relativas se obtiene la expresión porcentual de las frecuencias absolutas.
+
+**Frecuencia relativa acumulada:** es el resultado de dividir cada frecuencia absoluta acumulada por el número de datos y se designa por $F_i$
+
+$$
+F_i = {N_i \over N}
+$$
+De la expresión anterior se obtiene:
+
+$$
+F_i = {N_i \over N} = {1 \over N}\sum_{j=1}^{i}{n_j}=\sum_{j=1}^{i}{n_j \over N}=\sum_{j=1}^{i}{f_j}
+$$
+
+es decir, también es posible obtener las frecuencias relativas acumuladas acumulando las frecuencias relativas. Para el ejemplo planteado la distribución de frecuencias quedaría como sigue:
+
+```{r, echo = FALSE}
+dis$Ni <- cumsum(dis[,2])
+dis$fi <- dis$`n~i~`/sum(dis$`n~i~`)
+dis$Fi <- cumsum(dis$fi)
+```
+
+```{r tab:dist-fr-sin-agrupar-2, echo = FALSE}
+dis %>%
+  kbl() %>%
+  kable_paper("hover", full_width = F)
+```
+
+De las anteriores definiciones se pueden obtener las siguientes consecuencias inmediatas:
+
+a)  La suma de todas las frecuencias absolutas es igual al número de observaciones.
+b)  La última frecuencia absoluta acumulada es igual al número de observaciones.
+c)  La suma de todas las frecuencias relativas es igual a 1.
+d)  La última frecuencia relativa acumulada es siempre 1.
+
+Se dice que dos distribuciones de frecuencias son iguales cuando sean iguales los diferentes valores que tome la variable y aparezcan con las mismas frecuencias relativas.
+
+## Distribuciones agrupadas en intervalos.
+
+No todas las variables estadísticas son de tan fácil manejo como la expuesta en el ejemplo anterior. Hay que tener en cuenta que el número de observaciones con el que se ha trabajado era muy pequeño (no obstante la estadística se centra en el manejo de grandes volúmenes de información) y además el número de observaciones distintas permitía presentar una distribución de frecuencias con muy pocas filas. Esta segunda observación está relacionada con el hecho de que la variable estudiada era de tipo discreto.
+
+Ahora bien, es muy posible que en otros casos se presente el problema de tener una cantidad enorme de valores distintos de la variable y una gran cantidad de observaciones. En este caso la distribución de frecuencias presentada en el apartado anterior no tiene ningún valor ya que resultaría una tabla con muchas filas perdiendo de esta manera su utilidad como forma de presentar la información.
+
+Considérese por ejemplo que se está investigando el sueldo percibido por los empleados de una
+determinada empresa. Estos sueldos en principio oscilarán desde el más pequeño de ellos, el sueldo correspondiente a un aprendiz, hasta el mayor correspondiente al director general. Es más, es muy posible que ninguno de los miles de los empleados de la empresa reciba exactamente la misma remuneración, ya sea por el cargo que desempeñan, por el tipo de desgravación fiscal que tienen, por la antigüedad en el cargo, por el número de horas extras realizadas, etc,... Así, es posible obtener una distribución de frecuencias desproporcionada con cientos de valores distintos que toma la variable. Esta no será pues la forma idónea de presentar los datos. Para solucionar este problema se hace el siguiente razonamiento: A cualquiera de los efectos no se consideran distintas aquellas personas cuyo sueldo oscila en una determinada cantidad, por ejemplo, es prácticamente lo mismo que una persona cobre 1237€ o que cobre 1238€. Así pues se van a agrupar los valores en clases o intervalos, teniendo en cuenta que lo que se gana en manejabilidad se pierde en información. Esto es lógico, ya que mientras que en el ejemplo anterior se conocía exactamente el valor de todas las observaciones, en el caso de realizar agrupaciones sólo se conocerán los valores aproximados. Además cuanto más amplias sean las clases menor número de clases se obtendrán y por tanto mayor manejabilidad a la misma vez que la información será más imprecisa.
+
+El nuevo problema que ahora se plantea es cómo determinar el número de clases o intervalos en los que dividir los datos, o si éstos van a tener todos la misma amplitud o distinta. Estas decisiones deberán tomarse en cada caso particular, tanto dependiendo de los datos que se tengan como del objeto de la investigación. Únicamente señalar que generalmente el número de intervalos oscilará entre 5 y 15.
+
+Para ver de que forma se pueden hacer estas divisiones cuando se trate de construir intervalos de la misma amplitud, se define en primer lugar lo que se entiende por **Recorrido** o **Rango** de la variable.
+
+Esto es, se entiende por **Recorrido** ($Re$)de una variable la diferencia entre el valor máximo y el mínimo de las observaciones.
+
+$$
+Re = max\{x_i\}-mín\{x_i\}
+$$
+Con este valor, supuesto que se quieran obtener $d$ intervalos, todos ellos de igual amplitud, se debe realizar el cociente $Re/d$ que será la amplitud que se debe tomar para cada intervalo. Así, llamando a la amplitud del i-ésimo intervalo se tiene:
+
+En la mayoría de las situaciones, los intervalos que se obtengan mediante este razonamiento no serán los más adecuados para la presentación de la distribución de frecuencias, ya que los extremos de cada una de las clases serán números elegidos de forma aleatoria cuya elección no ayudará a la comprensión del fenómeno que se está estudiando. Así, en el caso del ejemplo bien se podían encontrar intervalos de la forma (1324,1465]; (1465,1732];.... Estos intervalos más que clarificar, ayudarán a enturbiar la compresión del fenómeno.
+
+Como no existen unas normas estrictas para realizar intervalos se debe aprovechar esta situación para presentar los datos de la forma más clara posible, por tanto, se elegirá usualmente como amplitud de los intervalos el número más "redondo" posible que sea mayor y más próximo al cociente $Re/d$. De igual forma, se considerará como extremo inferior del intervalo un valor inferior, y lo más próximo, al mínimo de las observaciones también lo más "redondo" posible. Como las normas que se han establecido para la construcción de intervalos son bastante amplias es muy posible que dos personas distintas realicen agrupaciones distintas y no por esto ninguna de ellas tendrá que ser inadecuada.
+Esto es, en principio no hay una forma única de realizar agrupaciones por intervalos, aunque si que habrá pocas formas lógicas de hacerlo.
+
+Como forma más habitual de denotar los intervalos se utilizará la nomenclatura $(L_{i-1},L_i]$, quedando así las clases como: $(L_0,L_1]$;$(L_1,L_2]$ ;...;$(L_{n-1},L_n]$. Por último señalar que al realizar esta operación se han perdido los valores exactos que toma la variable lo cual hace perder operatividad. Con el fin de subsanar este problema se elegirá un representante de cada uno de los intervalos que será el valor teórico utilizado para representar las observaciones que se encuentran dentro de esa clase. 
+
+A este valor se le denomina **Marca de Clase** y se corresponde con el punto medio del intervalo, esto es, se puede obtener como semisuma de los extremos del intervalo:
+
+$$
+x_i ={{L_{i-1}+L_i} \over 2}
+$$
+
+# Representaciones Gráficas
+
+Aunque el par de columnas correspondiente a una distribución de frecuencias encierra toda la información disponible, es útil traducirla en gráficos mediante una adecuada representación grñafica.
+
+Las representaciones gráficas son una parte fundamental de la estadística descriptiva debido a su capacidad para resumir y comunicar de manera efectiva información compleja de conjuntos de datos. Algunas de las razones más importantes para la importancia de las representaciones gráficas en la estadística descriptiva son las siguientes:
+
+**Visualización de Datos:** Las representaciones gráficas permiten visualizar los datos de una manera que los números y las tablas por sí solos no pueden. Al ver los datos en forma de gráficos o diagramas, es más fácil identificar patrones, tendencias y relaciones entre las variables.
+
+**Simplificación y Resumen:** Los gráficos y diagramas pueden resumir grandes conjuntos de datos en una forma más concisa y fácil de comprender. Esto facilita la identificación de valores atípicos, tendencias centrales, dispersión y otras características importantes.
+
+**Comparaciones y Contrastes:** Las representaciones gráficas permiten comparar múltiples conjuntos de datos o categorías de manera rápida y efectiva. Esto es útil para identificar diferencias o similitudes entre grupos.
+
+**Comunicación Efectiva:** Las gráficas son una herramienta efectiva para comunicar resultados a audiencias diversas, incluyendo a personas que pueden no estar familiarizadas con la estadística. Un buen gráfico puede transmitir información de manera más clara y persuasiva que una tabla de números.
+
+**Exploración Inicial:** Las gráficas son útiles para explorar datos antes de realizar análisis estadísticos más avanzados. Pueden ayudar a identificar posibles áreas de interés o hipótesis que luego pueden ser investigadas con más detalle.
+
+**Identificación de Tendencias y Anomalías:** Los gráficos pueden revelar tendencias a lo largo del tiempo o en diferentes categorías. También son útiles para detectar valores atípicos o datos anómalos que pueden requerir una mayor investigación.
+
+**Selección de Métodos Estadísticos:** Las representaciones gráficas pueden guiar la elección de métodos estadísticos apropiados. Por ejemplo, un histograma puede sugerir la distribución de los datos y ayudar a determinar si es necesario realizar alguna prueba estadística específica.
+
+**Mejora de la Comprensión:** Muchas personas encuentran que es más fácil comprender y recordar información cuando se presenta de manera visual. Las representaciones gráficas pueden ayudar a las personas a asimilar y retener conceptos estadísticos.
+
+> **_Las representaciones gráficas desempeñan un papel esencial en la estadística descriptiva al simplificar la información, hacer que los datos sean más accesibles y facilitar la comunicación de resultados. Ayudan a los analistas de datos y a los tomadores de decisiones a comprender mejor los datos y a tomar decisiones informadas basadas en la información visualizada._**
+
+
+Siguiendo con la línea ya empezada aquí sólo haremos referencia a los gráficos correspondientes a las variables cuantitativas, dejando para un tema posterior los correspondientes a atributos.
+
+<!-- Aunque son múltiples las formas de representación gráfica que admite una distribución de frecuencias, nosotros presentaremos aquí sólo una pocas, haciendo una serie de recomendaciones que nos ayuden a clarificar la interpretación de los resultados. Distinguiremos entre gráficos para -->
+<!-- distribuciones no agrupadas y agrupadas en intervalos: -->
+
+<!-- ### Distribuciones no agrupadas en intervalos: -->
+
+<!-- Cuando queramos hacer una representación gráfica de una distribución de frecuencias no agrupada en -->
+<!-- intervalos haremos uso fundamentalmente de los gráficos de barras y de escalera, según queramos -->
+<!-- representar las frecuencias sin acumular o acumuladas. -->
+
+<!-- #### Diagrama de barras -->
+
+<!-- Presentaremos un gráfico donde en el eje de abscisas escribiremos los valores que toma la variable ($x_i$) y en el eje de ordenadas las frecuencias absolutas o relativas, levantando una barra sobre cada -->
+<!-- valor de la variable, cuya altura se corresponda con la frecuencia absoluta de dicho valor de la variable. -->
+
+<!-- ![Número de parcelas para construir por km en La Manga de Mar Menor](/Users/fernandoair/Library/CloudStorage/Dropbox/EstadisticaEmpresarial/figurasR/g_barras.png){width=50%} -->
+
+<!-- Por ejemplo, dada la distribución de frecuencias: -->
+
+<!-- :   1 2 3 4 5 6 7 -->
+<!-- :   3 13 8 11 2 5 9 -->
+
+<!-- el diagrama de barras correspondiente será: \#\#\# Diagrama de escalera: -->
+
+<!-- Este diagrama lo utilizaremos para representar las Frecuencias absolutas o relativas acumuladas de una distribución de frecuencias. Por ejemplo, dada la distribución de frecuencias: : 1 2 3 4 5 : 1 3 -->
+<!-- 4 7 8 -->
+
+<!-- el diagrama de escalera correspondiente será: -->
+
+<!-- ### Distribuciones agrupadas en intervalos: -->
+
+<!-- Cuando debamos realizar representaciones gráficas de distribuciones agrupadas en intervalos, los -->
+<!-- gráficos más útiles son los siguientes dependiendo de si queremos representar las frecuencias sin -->
+<!-- acumular o acumuladas. -->
+
+<!-- #### Histograma de frecuencias -->
+
+<!-- Para representar Frecuencias absolutas o Frecuencias relativas sin acumular. Se levanta un -->
+<!-- rectángulo cuya base coincida con el intervalo correspondiente y cuya altura sea igual a la -->
+<!-- frecuencia de dicho intervalo. -->
+
+<!-- Por ejemplo, dada la distribución de frecuencias: -->
+
+<!-- :   (2,4] (4,6] (6,8] (8,10] (10,12] -->
+
+<!-- :   3 8 7 2 4 -->
+
+<!-- el histograma correspondiente ser : -->
+
+<!-- Aquí debemos hacer una advertencia: Cuando los intervalos no sean de la misma amplitud la altura de cada rectángulo debe ser la densidad de frecuencia ($h_i$) esto es, el cociente entre la frecuencia -->
+<!-- absoluta y la amplitud del intervalo ( $h_i = n_i/c_i$), De esta forma, el área de cada rectángulo será proporcional a la frecuencia absoluta ya que en el caso de asignar a cada rectángulo la altura $n_i$ nos encontraremos con gráficos que ponderan aquellos intervalos más amplios. -->
+
+# Los símbolos $\Pi$ y $\Sigma$.
+
+A lo largo del libro utilizaremos la simbología matemática, que será de sobra conocida por la mayoría de los lectores de este libro, aunque la recordaremos para aquellos que la hayan olvidado.
+
+- Para todo. ($\forall$)
+- Existe ($\exists$)
+- Pertenece ($\in$)
+- No pertenece ($\notin$) 
+- Sumatorio ($\Sigma$)
+- Productorio ($\prod$)
+
+
+Éste símbolo, quizás el más utilizado en la escritura del libro, conviene que quede claro antes de realizar la lectura del libro. es una forma abreviada de expresar la suma de n términos. 
+
+- Sumatorio ($\Sigma$)
+
+$$
+\sum_{i=1}^n{x_i}=x_1+x_1+...+x_n
+$$
+
+- Productorio ($\prod$).
+
+es una forma abreviada de expresar el producto de n términos.
+
+$$
+\prod_{i=1}^{n} x_i =x_1 \cdot x_1 \cdot \   \dots \ \cdot  x_n
+$$
+
+
+
